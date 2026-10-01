@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:praktikum/screens/signup_screen.dart';
 import 'screens/signin_screen.dart';
 
 void main() {
@@ -12,11 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Anime Verse',
+      title: 'AnimeVerse',
       theme: ThemeData(
         fontFamily: 'Urbanist',
       ),
-      home: const SignUpScreen(),
+      home: const SignInScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

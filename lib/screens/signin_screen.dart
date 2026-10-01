@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/app_scaffold.dart';
+import 'signup_screen.dart';
+import 'home_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -15,6 +17,7 @@ class SignInScreen extends StatelessWidget {
         builder: (context, constraints) {
           final isLargeScreen = constraints.maxWidth > 600;
           final maxWidth = isLargeScreen ? 400.0 : constraints.maxWidth;
+
           return SingleChildScrollView(
             child: Center(
               child: Container(
@@ -24,6 +27,7 @@ class SignInScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: screenHeight * 0.14),
+                    // Signin Title
                     Text(
                       'Welcome Back!',
                       style: TextStyle(
@@ -44,80 +48,99 @@ class SignInScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.05),
-
-                    //text Field Email
+                    // Email TextField
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        labelStyle: TextStyle(fontSize: screenWidth * 0.04, color:
-                        Colors.white70),
+                        labelStyle: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: Colors.white70,
+                        ),
                         filled: true,
                         fillColor: Colors.white.withValues(alpha: 0.1),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(screenWidth * 0.03),
                           borderSide: BorderSide.none,
                         ),
-                        prefixIcon: Icon(Icons.email, color: Colors.white70, size:
-                        screenWidth * 0.06),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.white70,
+                          size: screenWidth * 0.06,
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                           vertical: screenHeight * 0.025,
                           horizontal: screenWidth * 0.055,
                         ),
                       ),
-                      style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.white,
+                      ),
                       keyboardType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-
-                    //Text Field Password
+                    // Password TextField
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        labelStyle: TextStyle(fontSize: screenWidth * 0.04, color:
-                        Colors.white70),
+                        labelStyle: TextStyle(
+                          fontSize: screenWidth * 0.04,
+                          color: Colors.white70,
+                        ),
                         filled: true,
                         fillColor: Colors.white.withValues(alpha: 0.1),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(screenWidth * 0.03),
                           borderSide: BorderSide.none,
                         ),
-                        prefixIcon: Icon(Icons.lock_outline, color: Colors.white70, size:
-                        screenWidth * 0.06),
-                        suffixIcon: Icon(Icons.visibility_off_outlined, color:
-                        Colors.white70, size: screenWidth * 0.06),
+                        prefixIcon: Icon(
+                          Icons.lock_outline,
+                          color: Colors.white70,
+                          size: screenWidth * 0.06,
+                        ),
+                        suffixIcon: Icon(
+                          Icons.visibility_off_outlined,
+                          color: Colors.white70,
+                          size: screenWidth * 0.06,
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                           vertical: screenHeight * 0.025,
                           horizontal: screenWidth * 0.055,
                         ),
                       ),
-                      style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.white,
+                      ),
                       obscureText: true,
                     ),
                     SizedBox(height: screenHeight * 0.01),
-
-                    //Forgot Password
+                    // Forgot Password
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         child: Text(
                           'Forgot Password?',
-                          style: TextStyle(fontSize: screenWidth * 0.035, color:
-                          Colors.blue.shade300),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035,
+                            color: Colors.blue.shade300,
+                          ),
                         ),
-                        onPressed: () {
-                          // TODO: Implement forgot password functionality
-                        },
+                        onPressed: () {},
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
-
-                    //Sign In Button
+                    // Sign In Button
                     SizedBox(
                       width: double.infinity,
                       height: screenHeight * 0.075,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement sign in functionality
+                          // Menavigasi ke HomeScreen dan menghapus halaman login dari tumpukan
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.withValues(alpha: 0.8),
@@ -129,37 +152,48 @@ class SignInScreen extends StatelessWidget {
                         ),
                         child: Text(
                           'Sign In',
-                          style: TextStyle(fontSize: screenWidth * 0.045, fontWeight:
-                          FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.045,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
-
-                    // Or Divider
+                    // or continue with
                     Row(
                       children: [
-                        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.3),
-                            thickness: 1)),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            thickness: 1,
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                          child: Text('or', style: TextStyle(fontSize: screenWidth * 0.035,
-                              color: Colors.white70)),
+                          child: Text(
+                            'or',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.035,
+                              color: Colors.white70,
+                            ),
+                          ),
                         ),
-                        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.3),
-                            thickness: 1)),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            thickness: 1,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.03),
-
-                    // Google Sign In Button
+                    // Sign in with Google
                     SizedBox(
                       width: double.infinity,
                       height: screenHeight * 0.075,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: Implement Google sign in functionality
-                        },
+                        onPressed: () {},
                         icon: SvgPicture.asset(
                           'assets/images/google_icon.svg',
                           height: screenWidth * 0.06,
@@ -167,8 +201,11 @@ class SignInScreen extends StatelessWidget {
                         ),
                         label: Text(
                           'Continue with Google',
-                          style: TextStyle(fontSize: screenWidth * 0.04, fontWeight:
-                          FontWeight.w500, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black45,
@@ -181,30 +218,36 @@ class SignInScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.04),
-
-                    //Don't have an account? Sign Up
+                    // Sign up link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Don't have an account? ",
-                          style: TextStyle(fontSize: screenWidth * 0.04, color:
-                          Colors.white70),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            color: Colors.white70,
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
-                            // TODO: Navigate to sign up screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                            );
                           },
                           child: Text(
                             'Sign Up',
-                            style: TextStyle(fontSize: screenWidth * 0.04, fontWeight:
-                            FontWeight.w600, color: Colors.blue.shade300),
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.blue.shade300,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.05),
-
                   ],
                 ),
               ),
