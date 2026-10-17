@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../config/routes.dart';
 import '../widgets/app_scaffold.dart';
-import 'signup_screen.dart';
-import 'home_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -17,7 +18,6 @@ class SignInScreen extends StatelessWidget {
         builder: (context, constraints) {
           final isLargeScreen = constraints.maxWidth > 600;
           final maxWidth = isLargeScreen ? 400.0 : constraints.maxWidth;
-
           return SingleChildScrollView(
             child: Center(
               child: Container(
@@ -27,7 +27,6 @@ class SignInScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: screenHeight * 0.14),
-                    // Signin Title
                     Text(
                       'Welcome Back!',
                       style: TextStyle(
@@ -48,7 +47,7 @@ class SignInScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.05),
-                    // Email TextField
+                    // email
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -59,7 +58,9 @@ class SignInScreen extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white.withValues(alpha: 0.1),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                          borderRadius: BorderRadius.circular(
+                            screenWidth * 0.03,
+                          ),
                           borderSide: BorderSide.none,
                         ),
                         prefixIcon: Icon(
@@ -79,7 +80,7 @@ class SignInScreen extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    // Password TextField
+                    //password
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -90,7 +91,9 @@ class SignInScreen extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white.withValues(alpha: 0.1),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                          borderRadius: BorderRadius.circular(
+                            screenWidth * 0.03,
+                          ),
                           borderSide: BorderSide.none,
                         ),
                         prefixIcon: Icon(
@@ -115,7 +118,7 @@ class SignInScreen extends StatelessWidget {
                       obscureText: true,
                     ),
                     SizedBox(height: screenHeight * 0.01),
-                    // Forgot Password
+                    //Forgot Password
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -126,27 +129,27 @@ class SignInScreen extends StatelessWidget {
                             color: Colors.blue.shade300,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: Implement forgot password functionality
+                        },
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
-                    // Sign In Button
+                    //Sign In Button
                     SizedBox(
                       width: double.infinity,
                       height: screenHeight * 0.075,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Menavigasi ke HomeScreen dan menghapus halaman login dari tumpukan
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
-                          );
+                          context.go(AppRoutes.home);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.withValues(alpha: 0.8),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                            borderRadius: BorderRadius.circular(
+                              screenWidth * 0.03,
+                            ),
                           ),
                           elevation: 5,
                         ),
@@ -160,7 +163,7 @@ class SignInScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
-                    // or continue with
+                    // Or Divider
                     Row(
                       children: [
                         Expanded(
@@ -170,7 +173,9 @@ class SignInScreen extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.03,
+                          ),
                           child: Text(
                             'or',
                             style: TextStyle(
@@ -188,12 +193,14 @@ class SignInScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.03),
-                    // Sign in with Google
+                    // Google Sign In Button
                     SizedBox(
                       width: double.infinity,
                       height: screenHeight * 0.075,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: Implement Google sign in functionality
+                        },
                         icon: SvgPicture.asset(
                           'assets/images/google_icon.svg',
                           height: screenWidth * 0.06,
@@ -210,15 +217,20 @@ class SignInScreen extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black45,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                            side: const BorderSide(color: Colors.black45, width: 1),
+                            borderRadius: BorderRadius.circular(
+                              screenWidth * 0.03,
+                            ),
+                            side: const BorderSide(
+                              color: Colors.black45,
+                              width: 1,
+                            ),
                           ),
                           elevation: 3,
                         ),
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.04),
-                    // Sign up link
+                    //Don't have an account? Sign Up
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -231,10 +243,7 @@ class SignInScreen extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
-                            );
+                            context.go(AppRoutes.signUp);
                           },
                           child: Text(
                             'Sign Up',
