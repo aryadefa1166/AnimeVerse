@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../data/dummy_data.dart';
 import '../models/anime.dart';
 import '../widgets/app_scaffold.dart';
+import '../providers/app_state_provider.dart';
 
 class DetailScreen extends StatelessWidget {
   final String id;
@@ -19,6 +21,11 @@ class DetailScreen extends StatelessWidget {
     final Anime? anime = DummyData.animeList
         .where((anime) => anime.id == id)
         .firstOrNull;
+
+    // Tambahkan variabel isFav untuk mengecek status favorit
+    final isFav = anime != null
+        ? Provider.of<AppStateProvider>(context).isFavorite(anime.id)
+        : false;
 
     if (anime == null) {
       return Scaffold(
@@ -209,41 +216,51 @@ class DetailScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: screenWidth * 0.05),
-                        // Add to Favorites
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.03,
-                            vertical: screenHeight * 0.01,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.redAccent,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.3),
-                                blurRadius: screenWidth * 0.02,
-                                offset: Offset(0, screenHeight * 0.005),
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.favorite_border,
-                                color: Colors.white,
-                                size: screenWidth * 0.04,
-                              ),
-                              SizedBox(width: screenWidth * 0.01),
-                              Text(
-                                'Add to Favorites',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: screenWidth * 0.035,
-                                  fontWeight: FontWeight.w700,
+                        // Add to Favorites (Dibungkus GestureDetector)
+                        GestureDetector(
+                          onTap: () {
+                            // Panggil fungsi toggleFavorite dari provider
+                            Provider.of<AppStateProvider>(context, listen: false)
+                                .toggleFavorite(anime);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.03,
+                              vertical: screenHeight * 0.01,
+                            ),
+                            decoration: BoxDecoration(
+                              // Logika warna berdasarkan isFav
+                              color: isFav ? Colors.grey : Colors.redAccent,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: screenWidth * 0.02,
+                                  offset: Offset(0, screenHeight * 0.005),
                                 ),
-                              ),
-                            ],
+                              ],
+                              borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  // Logika icon berdasarkan isFav
+                                  isFav ? Icons.favorite : Icons.favorite_border,
+                                  color: Colors.white,
+                                  size: screenWidth * 0.04,
+                                ),
+                                SizedBox(width: screenWidth * 0.01),
+                                Text(
+                                  // Logika teks berdasarkan isFav
+                                  isFav ? 'Added to favorite' : 'Add to Favorites',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.035,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Tambahkan import provider
 import '../widgets/app_scaffold.dart';
-import '../data/dummy_data.dart';
 import '../widgets/favorite_anime_card.dart';
+import '../providers/app_state_provider.dart'; // Tambahkan import app_state_provider
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -11,8 +12,8 @@ class FavoriteScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Get one anime from dummy data for display
-    final favoriteAnime = DummyData.animeList.first;
+    // Ambil daftar anime favorit secara dinamis dari provider
+    final favoriteAnimes = Provider.of<AppStateProvider>(context).favorites;
 
     return AppScaffold(
       appBar: AppBar(
@@ -79,15 +80,28 @@ class FavoriteScreen extends StatelessWidget {
 
           // Favorite Anime List
           Expanded(
-            child: ListView.builder(
+            // Cek apakah daftar favorit kosong
+            child: favoriteAnimes.isEmpty
+                ? Center(
+              child: Text(
+                'Belum ada anime favorit.',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: screenWidth * 0.045,
+                ),
+              ),
+            )
+                : ListView.builder(
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-              itemCount: 1, // Demo static UI
+              itemCount: favoriteAnimes.length, // Sesuai jumlah data favorit
               itemBuilder: (context, index) {
+                final anime = favoriteAnimes[index]; // Ambil data satuan
                 return FavoriteAnimeCard(
-                  title: favoriteAnime.title,
-                  genre: favoriteAnime.genre,
-                  rating: favoriteAnime.rating,
-                  imagePath: favoriteAnime.imagePath,
+                  id: anime.id, // Pastikan id dikirim
+                  title: anime.title,
+                  genre: anime.genre,
+                  rating: anime.rating,
+                  imagePath: anime.imagePath,
                 );
               },
             ),
