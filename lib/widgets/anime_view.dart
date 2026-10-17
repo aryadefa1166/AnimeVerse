@@ -46,13 +46,7 @@ class AnimeView extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailScreen(
-                        id: anime.id,
-                        title: anime.title,
-                        imagePath: anime.imagePath,
-                        genre: anime.genre,
-                        rating: anime.rating,
-                        totalEpisodes: anime.totalEpisodes,
-                        description: anime.description,
+                        id: anime.id, // Cukup kirim id saja
                       ),
                     ),
                   );
