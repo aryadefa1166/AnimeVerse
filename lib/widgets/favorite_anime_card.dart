@@ -5,6 +5,7 @@ class FavoriteAnimeCard extends StatelessWidget {
   final String id;
   final String title;
   final String genre;
+
   final String rating;
   final String imagePath;
 

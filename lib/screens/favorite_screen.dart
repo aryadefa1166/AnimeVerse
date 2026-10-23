@@ -1,19 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Tambahkan import provider
+import 'package:provider/provider.dart';
 import '../widgets/app_scaffold.dart';
+import '../providers/app_state_provider.dart';
 import '../widgets/favorite_anime_card.dart';
-import '../providers/app_state_provider.dart'; // Tambahkan import app_state_provider
+import '../widgets/search_field.dart';
 
-class FavoriteScreen extends StatelessWidget {
+class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
+
+  @override
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
+
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Mengambil state query pencarian favorit dari provider
+    _searchController = TextEditingController(
+      text: context.read<AppStateProvider>().favoriteSearchQuery,
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Ambil daftar anime favorit secara dinamis dari provider
-    final favoriteAnimes = Provider.of<AppStateProvider>(context).favorites;
+    // Sambungkan Provider
+    final favoriteProvider = context.watch<AppStateProvider>();
+    final favorites = favoriteProvider.getFilteredFavorites();
 
     return AppScaffold(
       appBar: AppBar(
@@ -31,77 +55,58 @@ class FavoriteScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Search Bar
-          Padding(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    blurRadius: screenWidth * 0.02,
-                    offset: Offset(0, screenHeight * 0.005),
-                  ),
-                ],
-              ),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search Favorite Anime",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: screenWidth * 0.04,
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                    size: screenWidth * 0.06,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFF0b395e),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.05,
-                    vertical: screenHeight * 0.015,
-                  ),
-                ),
-                style: TextStyle(
-                  fontSize: screenWidth * 0.04,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+          // Search Bar untuk Favorit
+          SearchField(
+            controller: _searchController,
+            hintText: 'Search favorites',
+            onChanged: (value) {
+              favoriteProvider.setFavoriteSearchQuery(value);
+            },
+            showClear: favoriteProvider.favoriteSearchQuery.isNotEmpty,
+            onClear: () {
+              _searchController.clear();
+              favoriteProvider.setFavoriteSearchQuery('');
+            },
           ),
 
           SizedBox(height: screenHeight * 0.01),
 
-          // Favorite Anime List
+          // Favorite Anime List & Empty States
           Expanded(
-            // Cek apakah daftar favorit kosong
-            child: favoriteAnimes.isEmpty
+            child: favorites.isEmpty
                 ? Center(
-              child: Text(
-                'Belum ada anime favorit.',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: screenWidth * 0.045,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.favorite_border,
+                    size: 32,
+                    color: Colors.white70,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    favoriteProvider.favorites.isEmpty
+                        ? 'Belum ada anime favorit'
+                        : 'Anime tidak ditemukan',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
               ),
             )
                 : ListView.builder(
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-              itemCount: favoriteAnimes.length, // Sesuai jumlah data favorit
+              itemCount: favorites.length,
               itemBuilder: (context, index) {
-                final anime = favoriteAnimes[index]; // Ambil data satuan
+                final favoriteAnime = favorites[index];
                 return FavoriteAnimeCard(
-                  id: anime.id, // Pastikan id dikirim
-                  title: anime.title,
-                  genre: anime.genre,
-                  rating: anime.rating,
-                  imagePath: anime.imagePath,
+                  id: favoriteAnime.id,
+                  title: favoriteAnime.title,
+                  genre: favoriteAnime.genre,
+                  rating: favoriteAnime.rating,
+                  imagePath: favoriteAnime.imagePath,
                 );
               },
             ),
